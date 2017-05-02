@@ -110,15 +110,15 @@ class AssetorExtension extends CompilerExtension {
 
         $builder->addDefinition($this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY))
             ->setImplement(ITitleControlFactory::class)
-            ->setArguments($config[self::CONF_TITLE]);
+            ->setArguments([$config[self::CONF_TITLE]]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_META_CONTROL_FACTORY))
             ->setImplement(IMetaControlFactory::class)
-            ->setArguments($config[self::CONF_META]);
+            ->setArguments([$config[self::CONF_META]]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_ICON_CONTROL_FACTORY))
             ->setImplement(IIconControlFactory::class)
-            ->setArguments($config[self::CONF_ICON]);
+            ->setArguments([$config[self::CONF_ICON]]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_HEAD_CONTROL_FACTORY))
             ->setImplement(IHeadControlFactory::class)
