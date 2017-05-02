@@ -1,4 +1,4 @@
-Header
+HeaderControl
 =========
 Component for generating beuty and corect html header with included AssetsCollector.
 
@@ -99,9 +99,9 @@ Installation
 
 3) Register
 
-    \RM\AssetsCollector\AssetsCollectorExtension::register($configurator);
+    \RM\AssetsCollector\AssetorExtension::register($configurator);
 
-4) Create component Header https://github.com/romanmatyus/Header
+4) Create component HeaderControl https://github.com/romanmatyus/HeaderControl
 
 5) Change file @layout.latte such as this:
 
