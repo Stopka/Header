@@ -49,7 +49,7 @@ class AssetorExtension extends CompilerExtension {
      */
     private function getDefaultConfig() {
         return [
-            self::CONF_GROUP => [CssAssetControl::GROUP_ID,JsAssetControl::GROUP_ID],
+            self::CONF_GROUP => [CssAssetControl::GROUP_ID, JsAssetControl::GROUP_ID],
             self::CONF_TITLE => null,
             self::CONF_ICON => null,
             self::CONF_META => [],
@@ -102,10 +102,10 @@ class AssetorExtension extends CompilerExtension {
             ->setClass(AssetCollectionGroupFactory::class, $config[self::CONF_GROUP]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_PACKAGE_FACTORY))
-            ->setClass(PackageFactory::class, '@'.$this->prefix(self::SERVICE_GROUP_FACTORY));
+            ->setClass(PackageFactory::class, ['@' . $this->prefix(self::SERVICE_GROUP_FACTORY)]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_COLLECTOR))
-            ->setClass(AssetsCollector::class, '@'.$this->prefix(self::SERVICE_PACKAGE_FACTORY))
+            ->setClass(AssetsCollector::class, ['@' . $this->prefix(self::SERVICE_PACKAGE_FACTORY)])
             ->addSetup('registerPackages', $config[self::CONF_PACKAGES]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY))
@@ -122,9 +122,9 @@ class AssetorExtension extends CompilerExtension {
 
         $builder->addDefinition($this->prefix(self::SERVICE_HEAD_CONTROL_FACTORY))
             ->setImplement(IHeadControlFactory::class)
-            ->addSetup('addComponentFactory','@'.$this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY))
-            ->addSetup('addComponentFactory','@'.$this->prefix(self::SERVICE_META_CONTROL_FACTORY))
-            ->addSetup('addComponentFactory','@'.$this->prefix(self::SERVICE_ICON_CONTROL_FACTORY));
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY)])
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_META_CONTROL_FACTORY)])
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY)]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_HEAD_CONTROL_FACTORY))
             ->setImplement(IHtmlControlFactory::class);
