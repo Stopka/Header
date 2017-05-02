@@ -106,7 +106,7 @@ class AssetorExtension extends CompilerExtension {
 
         $builder->addDefinition($this->prefix(self::SERVICE_COLLECTOR))
             ->setClass(AssetsCollector::class, ['@' . $this->prefix(self::SERVICE_PACKAGE_FACTORY)])
-            ->addSetup('registerPackages', $config[self::CONF_PACKAGES]);
+            ->addSetup('registerPackages', [$config[self::CONF_PACKAGES]]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY))
             ->setImplement(ITitleControlFactory::class)
@@ -130,7 +130,7 @@ class AssetorExtension extends CompilerExtension {
             ->setImplement(IHtmlControlFactory::class);
 
         $self = $this;
-        $registerToLatte = function (ServiceDefinition $def) use ($self) {
+        /*$registerToLatte = function (ServiceDefinition $def) use ($self) {
             $def
                 ->addSetup('?->onCompile[] = function($engine) { RM\AssetsCollector\Latte\JsCssMacros::install($engine->getCompiler()); }', array('@self'));
         };
@@ -141,7 +141,7 @@ class AssetorExtension extends CompilerExtension {
 
         if ($builder->hasDefinition('nette.latte')) {
             $registerToLatte($builder->getDefinition('nette.latte'));
-        }
+        }*/
     }
 
     /**

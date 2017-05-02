@@ -11,7 +11,7 @@ use Stopka\Assetor\Collector\AssetsCollector;
  * @license MIT
  * @package HeaderControl
  */
-abstract class AbstractAssetControl extends Control {
+abstract class AbstractAssetControl extends Control implements IHeadComponent {
     /** @var  AssetsCollector */
     private $assetsCollector;
 

@@ -4,6 +4,8 @@ namespace Stopka\Assetor\Control;
 
 use Nette\Application\UI\Control;
 use Nette\Utils\Html;
+use Stopka\Assetor\Control\Head\IHeadComponent;
+use Stopka\Assetor\Control\Head\IHeadComponentFactory;
 
 /**
  * HeaderControl
@@ -18,6 +20,9 @@ use Nette\Utils\Html;
  */
 class HeadControl extends Control {
 
+    /** @var  IHeadComponentFactory[] */
+    private $componentFactories;
+
     public function render() {
         $this->renderBegin();
         $this->renderContents();
@@ -30,11 +35,20 @@ class HeadControl extends Control {
     }
 
     public function renderContents(){
-
+        //TODO
     }
 
     public function renderEnd() {
         echo Html::el('head')->endTag();
         echo "\n";
+    }
+
+    /**
+     * @param IHeadComponentFactory $componentFactory
+     * @return self
+     */
+    public function addComponentFactory(IHeadComponentFactory $componentFactory): self {
+        $this->componentFactories[] = $componentFactory;
+        return $this;
     }
 }

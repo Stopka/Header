@@ -13,7 +13,7 @@ use Nette\Utils\Html;
  * @license MIT
  * @package HeaderControl
  */
-class MetaControl extends Control {
+class MetaControl extends Control implements IHeadComponent {
     const META_CHARSET = 'charset';
 
     const META_REFRESH = 'refresh';

@@ -15,7 +15,7 @@ use Stopka\Assetor\Control\IIconFactory;
  * @license MIT
  * @package HeaderControl
  */
-class IconControl extends Control {
+class IconControl extends Control implements IHeadComponent {
 
     /** @var IIcon */
     private $favicon;

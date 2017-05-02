@@ -13,7 +13,7 @@ use Nette\Utils\Html;
  * @license MIT
  * @package HeaderControl
  */
-class TitleControl extends Control {
+class TitleControl extends Control implements IHeadComponent {
 
     /** @var string title separator */
     private $separator;

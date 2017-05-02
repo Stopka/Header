@@ -7,7 +7,6 @@ namespace Stopka\Assetor\Control\Head;
  * @license MIT
  * @package HeaderControl
  */
-interface IMetaControlFactory {
-    /** @return MetaControl */
-    public function create();
+interface IMetaControlFactory extends IHeadComponentFactory{
+    public function create(): MetaControl;
 }
