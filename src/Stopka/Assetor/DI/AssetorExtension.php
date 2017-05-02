@@ -126,7 +126,7 @@ class AssetorExtension extends CompilerExtension {
             ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_META_CONTROL_FACTORY)])
             ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY)]);
 
-        $builder->addDefinition($this->prefix(self::SERVICE_HEAD_CONTROL_FACTORY))
+        $builder->addDefinition($this->prefix(self::SERVICE_HTML_CONTROL_FACTORY))
             ->setImplement(IHtmlControlFactory::class);
 
         $self = $this;
