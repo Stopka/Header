@@ -30,7 +30,7 @@ class PackageFactory extends Object {
         return $this;
     }
 
-    public function create(array $details): BasePackage {
+    public function create(array $details): IPackage {
         if (isset($details[self::CONFIG_VIRTUAL])) {
             return $this->createVirtualPackage($details);
         }

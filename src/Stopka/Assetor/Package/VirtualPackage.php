@@ -1,6 +1,9 @@
 <?php
 
 namespace Stopka\Assetor\Package;
+use Nette\NotSupportedException;
+use Nette\Object;
+use Stopka\Assetor\Asset\BaseAsset;
 
 /**
  * Virtual package
@@ -8,7 +11,7 @@ namespace Stopka\Assetor\Package;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class VirtualPackage extends BasePackage {
+class VirtualPackage extends Object implements IPackage {
 
     /** @var string default selected subpackage */
     protected $default;
@@ -36,8 +39,35 @@ class VirtualPackage extends BasePackage {
         return $this->selected;
     }
 
-    public function select(string $packageName): self {
+    public function select(string $packageName): IPackage {
         $this->selected = $packageName;
         return $this;
     }
+
+    /**
+     * @return string[]
+     */
+    public function getDependencies(): array {
+        return [$this->selected];
+    }
+
+    /**
+     * @return string[] package names
+     */
+    public function getSelects(): array {
+        return [];
+    }
+
+    /**
+     * @return string[] package names
+     */
+    public function getProvides(): array {
+        throw new NotSupportedException("Virtual assetor package can't be used in 'selects' statement!");
+    }
+
+    public function getAssets(string $groupName): array {
+        return [];
+    }
+
+
 }

@@ -10,5 +10,5 @@ namespace Stopka\Assetor\Package;
 
 interface IPackageFactory {
 
-    public function create(array $details): BasePackage;
+    public function create(array $details): IPackage;
 }

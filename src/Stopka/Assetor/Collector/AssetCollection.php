@@ -28,4 +28,11 @@ class AssetCollection extends Object {
     public function addContent($content){
         $this->assets[] = new ContentAsset($content);
     }
+
+    /**
+     * @return BaseAsset[]
+     */
+    public function getAssets(): array {
+        return $this->assets;
+    }
 }

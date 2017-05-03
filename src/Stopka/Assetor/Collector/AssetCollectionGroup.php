@@ -3,6 +3,7 @@
 namespace Stopka\Assetor\Collector;
 
 use Nette\Object;
+use Stopka\Assetor\Asset\BaseAsset;
 
 /**
  * Class of Packages for AssetsCollector.
@@ -41,11 +42,39 @@ class AssetCollectionGroup extends Object {
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @return AssetCollection
+     */
     protected function getCollection(string $name): AssetCollection {
         return $this->collections[$name];
     }
 
-    public function addFile($groupName, $file) {
+    /**
+     * @param string $groupName
+     * @param string $file
+     * @return self
+     */
+    public function addFile(string $groupName, string $file): self {
         $this->getCollection($groupName)->addFile($file);
+        return $this;
+    }
+
+    /**
+     * @param string $groupName
+     * @param string $content
+     * @return self
+     */
+    public function addContent(string $groupName, string $content): self {
+        $this->getCollection($groupName)->addContent($content);
+        return $this;
+    }
+
+    /**
+     * @param string $groupName
+     * @return BaseAsset[]
+     */
+    public function getAssets(string $groupName): array {
+        return $this->getCollection($groupName)->getAssets();
     }
 }

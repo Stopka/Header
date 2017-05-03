@@ -1,5 +1,5 @@
 <?php
-namespace RM\AssetsCollector\Latte;
+namespace Stopka\Assetor\Latte;
 
 use Latte\Macros\MacroSet;
 use Latte\Compiler;

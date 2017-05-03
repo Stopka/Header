@@ -2,6 +2,8 @@
 
 namespace Stopka\Assetor\Package;
 
+use Nette\NotSupportedException;
+use Stopka\Assetor\Asset\BaseAsset;
 use Stopka\Assetor\Collector\AssetCollectionGroup;
 
 /**
@@ -10,7 +12,7 @@ use Stopka\Assetor\Collector\AssetCollectionGroup;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class AssetPackage extends BasePackage {
+class AssetPackage implements IPackage {
 
     /** @var string[] */
     protected $extends = [];
@@ -59,5 +61,40 @@ class AssetPackage extends BasePackage {
             return $this;
         $this->selects[] = $packageName;
         return $this;
+    }
+
+    public function getDependencies(): array {
+        return $this->extends;
+    }
+
+
+    /**
+     * @return string[] package names
+     */
+    public function getSelects(): array {
+        return $this->selects;
+    }
+
+    /**
+     * @return string[] package names
+     */
+    public function getProvides(): array {
+        return $this->provides;
+    }
+
+    /**
+     * @param string $packageName
+     * @return IPackage
+     */
+    public function select(string $packageName): IPackage {
+        throw new NotSupportedException("Asset assetor package can't be in 'provides' statement");
+    }
+
+    /**
+     * @param string $groupName
+     * @return BaseAsset[]
+     */
+    public function getAssets(string $groupName): array {
+        return $this->getAssetCollectionGroup()->getAssets($groupName);
     }
 }

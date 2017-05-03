@@ -6,6 +6,7 @@ use Nette\Configurator;
 use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Config\Helpers;
+use Nette\DI\ServiceDefinition;
 use Stopka\Assetor\Collector\AssetCollectionGroupFactory;
 use Stopka\Assetor\Collector\AssetsCollector;
 use Stopka\Assetor\Control\Head\CssAssetControl;
@@ -14,6 +15,7 @@ use Stopka\Assetor\Control\Head\IMetaControlFactory;
 use Stopka\Assetor\Control\Head\ITitleControlFactory;
 use Stopka\Assetor\Control\Head\JsAssetControl;
 use Stopka\Assetor\Control\Head\MetaCollector;
+use Stopka\Assetor\Latte\PackageMacro;
 use Stopka\Assetor\Package\PackageFactory;
 use Stopka\Assetor\Control\IHeadControlFactory;
 use Stopka\Assetor\Control\IHtmlControlFactory;
@@ -129,16 +131,15 @@ class AssetorExtension extends CompilerExtension {
             ->setImplement(IHeadControlFactory::class)
             ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY),'title'])
             ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_META_CONTROL_FACTORY),'meta'])
-            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY),'icon'])
-            ;
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY),'icon']);
 
         $builder->addDefinition($this->prefix(self::SERVICE_HTML_CONTROL_FACTORY))
             ->setImplement(IHtmlControlFactory::class);
 
         $self = $this;
-        /*$registerToLatte = function (ServiceDefinition $def) use ($self) {
+        $registerToLatte = function (ServiceDefinition $def) use ($self) {
             $def
-                ->addSetup('?->onCompile[] = function($engine) { RM\AssetsCollector\Latte\JsCssMacros::install($engine->getCompiler()); }', array('@self'));
+                ->addSetup('?->onCompile[] = function($engine) { '.PackageMacro::class.'::install($engine->getCompiler()); }', array('@self'));
         };
 
         if ($builder->hasDefinition('nette.latteFactory')) {
@@ -147,7 +148,7 @@ class AssetorExtension extends CompilerExtension {
 
         if ($builder->hasDefinition('nette.latte')) {
             $registerToLatte($builder->getDefinition('nette.latte'));
-        }*/
+        }
     }
 
     /**
