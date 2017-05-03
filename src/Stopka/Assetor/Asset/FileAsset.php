@@ -15,5 +15,27 @@ namespace Stopka\Assetor\Asset;
  * @license MIT
  */
 class FileAsset extends BaseAsset {
+    /** @var  string */
+    private $file;
 
+    public function __construct(string $file) {
+        $this->setFile($file);
+    }
+
+
+    /**
+     * @param string $file
+     * @return FileAsset
+     */
+    public function setFile(string $file): self{
+        $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFile(): string {
+        return $this->file;
+    }
 }

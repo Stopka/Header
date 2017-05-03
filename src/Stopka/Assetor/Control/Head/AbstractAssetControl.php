@@ -3,6 +3,7 @@
 namespace Stopka\Assetor\Control\Head;
 
 use Nette\Application\UI\Control;
+use Stopka\Assetor\Asset\BaseAsset;
 use Stopka\Assetor\Collector\AssetsCollector;
 
 /**
@@ -29,7 +30,7 @@ abstract class AbstractAssetControl extends Control implements IHeadComponent {
 
     abstract protected function getAssetGroupId(): string;
 
-    abstract protected function renderAsset($item);
+    abstract protected function renderAsset(BaseAsset $item): void;
 
     public function render() {
         foreach ($this->assetsCollector->getAssets($this->getAssetGroupId()) as $item) {

@@ -10,7 +10,7 @@ use Nette\Object;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class AssetCollectionGroupFactory extends Object {
+class AssetCollectionGroupFactory extends Object implements IAssetCollectionGroupFactory {
 
     protected $groupNames;
 
@@ -42,7 +42,7 @@ class AssetCollectionGroupFactory extends Object {
                 continue;
             }
             foreach ($assets[$collectionName] as $asset){
-                $group->addFile($group, $asset);
+                $group->addFile($collectionName, $asset);
             }
         }
         return $group;

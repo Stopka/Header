@@ -10,7 +10,9 @@ use Nette\DI\ServiceDefinition;
 use Stopka\Assetor\Collector\AssetCollectionGroupFactory;
 use Stopka\Assetor\Collector\AssetsCollector;
 use Stopka\Assetor\Control\Head\CssAssetControl;
+use Stopka\Assetor\Control\Head\ICssAssetControlFactory;
 use Stopka\Assetor\Control\Head\IIconControlFactory;
+use Stopka\Assetor\Control\Head\IJsAssetControlFactory;
 use Stopka\Assetor\Control\Head\IMetaControlFactory;
 use Stopka\Assetor\Control\Head\ITitleControlFactory;
 use Stopka\Assetor\Control\Head\JsAssetControl;
@@ -32,9 +34,13 @@ class AssetorExtension extends CompilerExtension {
     const SERVICE_PACKAGE_FACTORY = 'packageFactory';
     const SERVICE_ASSET_COLLECTOR = 'assetCollector';
     const SERVICE_META_COLLECTOR = 'metaCollector';
+
     const SERVICE_TITLE_CONTROL_FACTORY = 'titleControlFactory';
     const SERVICE_META_CONTROL_FACTORY = 'metaControlFactory';
     const SERVICE_ICON_CONTROL_FACTORY = 'iconControlFactory';
+    const SERVICE_JS_ASSET_CONTROL_FACTORY = 'jsAssetControlFactory';
+    const SERVICE_CSS_ASSET_CONTROL_FACTORY = 'cssAssetControlFactory';
+
     const SERVICE_HTML_CONTROL_FACTORY = 'htmlControl';
     const SERVICE_HEAD_CONTROL_FACTORY = 'headControl';
 
@@ -102,7 +108,7 @@ class AssetorExtension extends CompilerExtension {
         ));
 */
         $builder->addDefinition($this->prefix(self::SERVICE_GROUP_FACTORY))
-            ->setClass(AssetCollectionGroupFactory::class, $config[self::CONF_GROUP]);
+            ->setClass(AssetCollectionGroupFactory::class, [$config[self::CONF_GROUP]]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_PACKAGE_FACTORY))
             ->setClass(PackageFactory::class, ['@' . $this->prefix(self::SERVICE_GROUP_FACTORY)]);
@@ -118,7 +124,7 @@ class AssetorExtension extends CompilerExtension {
         $builder->addDefinition($this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY))
             ->setImplement(ITitleControlFactory::class)
             ->setArguments([$config[self::CONF_TITLE]])
-            ->addSetup('setMetaCollector',['@'.$this->prefix(self::SERVICE_META_COLLECTOR)]);
+            ->addSetup('setMetaCollector', ['@' . $this->prefix(self::SERVICE_META_COLLECTOR)]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_META_CONTROL_FACTORY))
             ->setImplement(IMetaControlFactory::class);
@@ -127,11 +133,18 @@ class AssetorExtension extends CompilerExtension {
             ->setImplement(IIconControlFactory::class)
             ->setArguments([$config[self::CONF_ICON]]);
 
+        $builder->addDefinition($this->prefix(self::SERVICE_CSS_ASSET_CONTROL_FACTORY))
+            ->setImplement(ICssAssetControlFactory::class);
+        $builder->addDefinition($this->prefix(self::SERVICE_JS_ASSET_CONTROL_FACTORY))
+            ->setImplement(IJsAssetControlFactory::class);
+
         $builder->addDefinition($this->prefix(self::SERVICE_HEAD_CONTROL_FACTORY))
             ->setImplement(IHeadControlFactory::class)
-            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY),'title'])
-            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_META_CONTROL_FACTORY),'meta'])
-            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY),'icon']);
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY), 'title'])
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_META_CONTROL_FACTORY), 'meta'])
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY), 'icon'])
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_CSS_ASSET_CONTROL_FACTORY), 'css'])
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_JS_ASSET_CONTROL_FACTORY), 'js']);;
 
         $builder->addDefinition($this->prefix(self::SERVICE_HTML_CONTROL_FACTORY))
             ->setImplement(IHtmlControlFactory::class);
@@ -139,7 +152,7 @@ class AssetorExtension extends CompilerExtension {
         $self = $this;
         $registerToLatte = function (ServiceDefinition $def) use ($self) {
             $def
-                ->addSetup('?->onCompile[] = function($engine) { '.PackageMacro::class.'::install($engine->getCompiler()); }', array('@self'));
+                ->addSetup('?->onCompile[] = function($engine) { ' . PackageMacro::class . '::install($engine->getCompiler()); }', array('@self'));
         };
 
         if ($builder->hasDefinition('nette.latteFactory')) {

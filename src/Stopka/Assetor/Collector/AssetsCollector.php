@@ -3,11 +3,8 @@
 namespace Stopka\Assetor\Collector;
 
 use Nette\Object;
-use Nette\FileNotFoundException;
 use Nette\InvalidArgumentException;
-use Nette\Utils\Finder;
-use Nette\Utils\Strings;
-use Nette\Utils\Validators;
+use Stopka\Assetor\Asset\BaseAsset;
 use Stopka\Assetor\Package\IPackage;
 use Stopka\Assetor\Package\IPackageFactory;
 
@@ -29,7 +26,7 @@ class AssetsCollector extends Object {
     private $packages;
 
     /** @var string[] used packages */
-    private $usedPackages;
+    private $usedPackages = [];
 
     /** @var string[] dependent packages */
     private $dependentPackages;
@@ -40,7 +37,7 @@ class AssetsCollector extends Object {
 
     /**
      * @param IPackageFactory $packageFactory
-     * @return $this
+     * @return self
      */
     public function setPackageFactory(IPackageFactory $packageFactory): self {
         $this->packageFactory = $packageFactory;
@@ -110,7 +107,7 @@ class AssetsCollector extends Object {
         }
     }
 
-    private function resolveSelection(array $packagesNames): array {
+    private function resolveSelection(array $packagesNames): void {
         foreach ($packagesNames as $packagesName) {
             $package = $this->getPackage($packagesName, true);
             $selectNames = $package->getSelects();
@@ -134,7 +131,7 @@ class AssetsCollector extends Object {
         $resolved = [];
         foreach ($packageNames as $packageName) {
             $unresolved = [];
-            $this->resolveDependeciesRecursively($packageNames, $resolved, $unresolved);
+            $this->resolveDependeciesRecursively($packageName, $resolved, $unresolved);
         }
         return $resolved;
     }
@@ -161,7 +158,11 @@ class AssetsCollector extends Object {
         return $this->dependentPackages;
     }
 
-    public function getAssets(string $groupName) {
+    /**
+     * @param string $groupName
+     * @return BaseAsset[]
+     */
+    public function getAssets(string $groupName): array {
         $assets = [];
         foreach ($this->getDependentPackages() as $dependentPackage) {
             $assets += $dependentPackage->getAssets($groupName);

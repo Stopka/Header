@@ -3,6 +3,7 @@
 namespace Stopka\Assetor\Control\Head;
 
 use Nette\Utils\Html;
+use Stopka\Assetor\Asset\BaseAsset;
 
 /**
  * @author Štěpán Škorpil
@@ -17,10 +18,10 @@ class CssAssetControl extends AbstractAssetControl {
         return self::GROUP_ID;
     }
 
-    protected function renderAsset($item) {
+    protected function renderAsset(BaseAsset $item): void {
         $link = Html::el('link');
         $link->attrs['rel'] = 'stylesheet';
-        $link->attrs['href'] = $item;
+        $link->attrs['href'] = $item->getFile();;
         echo $link . "\n";
     }
 }

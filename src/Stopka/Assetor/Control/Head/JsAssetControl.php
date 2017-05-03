@@ -3,6 +3,7 @@
 namespace Stopka\Assetor\Control\Head;
 
 use Nette\Utils\Html;
+use Stopka\Assetor\Asset\BaseAsset;
 
 /**
  * @author Štěpán Škorpil
@@ -17,9 +18,9 @@ class JsAssetControl extends AbstractAssetControl {
         return self::GROUP_ID;
     }
 
-    protected function renderAsset($item) {
+    protected function renderAsset(BaseAsset $item): void {
         $link = Html::el('script');
-        $link->attrs['src'] = $item;
+        $link->attrs['src'] = $item->getFile();
         echo $link . "\n";
     }
 }
