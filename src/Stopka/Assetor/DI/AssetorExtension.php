@@ -6,7 +6,6 @@ use Nette\Configurator;
 use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Config\Helpers;
-use Nette\DI\ServiceDefinition;
 use Stopka\Assetor\Collector\AssetCollectionGroupFactory;
 use Stopka\Assetor\Collector\AssetsCollector;
 use Stopka\Assetor\Control\Head\CssAssetControl;
@@ -122,9 +121,10 @@ class AssetorExtension extends CompilerExtension {
 
         $builder->addDefinition($this->prefix(self::SERVICE_HEAD_CONTROL_FACTORY))
             ->setImplement(IHeadControlFactory::class)
-            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY)])
-            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_META_CONTROL_FACTORY)])
-            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY)]);
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY),'title'])
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_META_CONTROL_FACTORY),'meta'])
+            //->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY),'icon'])
+            ;
 
         $builder->addDefinition($this->prefix(self::SERVICE_HTML_CONTROL_FACTORY))
             ->setImplement(IHtmlControlFactory::class);

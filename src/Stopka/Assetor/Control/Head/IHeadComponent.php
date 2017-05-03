@@ -7,6 +7,8 @@ namespace Stopka\Assetor\Control\Head;
  * @license MIT
  * @package HeaderControl
  */
-interface IHeadComponent {
+use Nette\ComponentModel\IComponent;
 
+interface IHeadComponent extends IComponent{
+    public function render();
 }

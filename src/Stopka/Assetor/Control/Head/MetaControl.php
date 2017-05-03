@@ -25,18 +25,41 @@ class MetaControl extends Control implements IHeadComponent {
     const META_DESCRIPTION = 'description';
     const META_ROBOTS = 'robots';
 
-    const CT_TEXT_HTML = 'text/html';
+    const CONTENTTYPE_TEXT_HTML = 'text/html';
     const CHARSET_UTF8 = 'UTF-8';
 
     /** @var array header meta tags */
     private $metas = array();
+
+    public function __construct(array $metas = []) {
+        parent::__construct();
+        $this->setCharset(self::CHARSET_UTF8);
+        $this->setContentType(self::CONTENTTYPE_TEXT_HTML);
+        $this->setMetas($metas);
+    }
+
+    /**
+     * @param array $metas
+     * @return self
+     */
+    public function setMetas(array $metas): self {
+        foreach ($metas as $name => $content) {
+            if (is_array($content)) {
+                $this->setMetaArrayItems($name, $content);
+                continue;
+            }
+            $this->setMeta($name, $content);
+        }
+        return $this;
+    }
+
 
     /**
      * @param string $name
      * @param string|null $value
      * @return self
      */
-    public function setMeta(string $name, string $value = null): self {
+    public function setMeta(string $name, ?string $value = null): self {
         if (!$value) {
             unset($this->metas[$name]);
         } else {
@@ -49,14 +72,14 @@ class MetaControl extends Control implements IHeadComponent {
      * @param string $name
      * @return string|null
      */
-    public function getMeta(string $name): string {
+    public function getMeta(string $name): ?string {
         return $this->metas[$name] ?? NULL;
     }
 
     /**
      * @return string[] $name=>$value
      */
-    public function getMetas() {
+    public function getMetas(): array {
         return $this->metas;
     }
 
@@ -64,25 +87,44 @@ class MetaControl extends Control implements IHeadComponent {
      * @param string|null $valueString
      * @return array
      */
-    protected function explodeValues(string $valueString): array {
+    protected function explodeValues(?string $valueString): array {
         if (!$valueString) {
             return [];
         }
         $values = explode(',', $valueString);
-        return array_map(function ($kw) {
-            return trim($kw);
-        }, $values);
+        $result = [];
+        foreach ($values as $value) {
+            list($var, $val) = explode("=", $value . '=');
+            if (!$val) {
+                $result[] = trim($var);
+            } else {
+                $result[trim($var)] = trim($val);
+            }
+        }
+        return $result;
     }
 
     /**
      * @param array $values
      * @return string|null
      */
-    protected function implodeValues(array $values): string {
-        if (!count($values)) {
+    protected function implodeValues(array $values): ?string {
+        $result = '';
+        foreach ($values as $var => $val) {
+            $sep = $result?', ':'';
+            if(!$val){
+                continue;
+            }
+            if(is_string($var)){
+                $result .= $sep . $var . '=' . $val;
+                continue;
+            }
+            $result .= $sep. $val;
+        }
+        if(!$result){
             return NULL;
         }
-        return implode(', ', $values);
+        return $result;
     }
 
     /**
@@ -96,7 +138,6 @@ class MetaControl extends Control implements IHeadComponent {
         if (!is_array($values)) {
             throw new InvalidArgumentException('Type of argument is not supported.');
         }
-        $values = array_values($values);
         return $values;
     }
 

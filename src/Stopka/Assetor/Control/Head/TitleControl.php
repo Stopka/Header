@@ -16,13 +16,23 @@ use Nette\Utils\Html;
 class TitleControl extends Control implements IHeadComponent {
 
     /** @var string title separator */
-    private $separator;
+    private $separator = '';
 
     /** @var bool whether title should be rendered in reverse order or not */
     private $reverseOrder = TRUE;
 
     /** @var string[] document hierarchical titles */
-    private $titles = array();
+    private $titles = array('');
+
+    /**
+     * TitleControl constructor.
+     * @param string $defaultTitle
+     */
+    public function __construct(string $defaultTitle='') {
+        parent::__construct();
+        $this->setTitle($defaultTitle);
+    }
+
 
     /**
      * @param string $title
@@ -111,5 +121,6 @@ class TitleControl extends Control implements IHeadComponent {
 
     public function render(){
         echo Html::el('title')->setText($this->getTitleString());
+        echo "\n";
     }
 }
