@@ -14,6 +14,7 @@ use Nette\Utils\Html;
  * @package HeaderControl
  */
 class TitleControl extends Control implements IHeadComponent {
+    const META_APP_TITLES = ['apple-mobile-web-app-title', 'application-name'];
 
     /** @var string title separator */
     private $separator = '';
@@ -24,13 +25,36 @@ class TitleControl extends Control implements IHeadComponent {
     /** @var string[] document hierarchical titles */
     private $titles = array('');
 
+    /** @var  IMetaCollector|null */
+    private $metaCollector;
+
     /**
      * TitleControl constructor.
      * @param string $defaultTitle
      */
-    public function __construct(string $defaultTitle='') {
+    public function __construct(string $defaultTitle = '') {
         parent::__construct();
         $this->setTitle($defaultTitle);
+    }
+
+    /**
+     * @param IMetaCollector|null $metaCollector
+     * @return self
+     */
+    public function setMetaCollector(?IMetaCollector $metaCollector): self {
+        $this->metaCollector = $metaCollector;
+        $this->updateMeta();
+        return $this;
+    }
+
+    protected function updateMeta() {
+        if (!$this->metaCollector) {
+            return;
+        }
+        $appTitle = $this->getTitle(0);
+        foreach (self::META_APP_TITLES as $name) {
+            $this->metaCollector->setMeta($name, $appTitle);
+        }
     }
 
 
@@ -42,9 +66,10 @@ class TitleControl extends Control implements IHeadComponent {
     public function setTitle(string $title, int $index = null): self {
         if ($index === null) {
             $this->titles = [$title];
-        }else{
+        } else {
             $this->titles[$index] = $title;
         }
+        $this->updateMeta();
         return $this; //fluent interface
     }
 
@@ -57,7 +82,7 @@ class TitleControl extends Control implements IHeadComponent {
             return $this->getTitle(count($this->titles) - 1);
         }
         if (!isset($this->titles[$index])) {
-            return null;
+            return '';
         }
         return (string)$this->titles[$index];
     }
@@ -67,7 +92,11 @@ class TitleControl extends Control implements IHeadComponent {
      * @return self
      */
     public function addTitle(string $title): self {
+        if(count($this->titles)==1&&!$this->titles[0]){
+            return $this->setTitle($title);
+        }
         $this->titles[] = $title;
+        $this->updateMeta();
         return $this;
     }
 
@@ -90,7 +119,7 @@ class TitleControl extends Control implements IHeadComponent {
     /**
      * @return string
      */
-    public function getSeparator():string {
+    public function getSeparator(): string {
         return $this->separator;
     }
 
@@ -113,13 +142,13 @@ class TitleControl extends Control implements IHeadComponent {
      */
     public function getTitleString(): string {
         $titles = $this->getTitles();
-        if($this->isOrderReversed()){
+        if ($this->isOrderReversed()) {
             $titles = array_reverse($titles);
         }
-        return implode($this->getSeparator(),$titles);
+        return implode($this->getSeparator(), $titles);
     }
 
-    public function render(){
+    public function render() {
         echo Html::el('title')->setText($this->getTitleString());
         echo "\n";
     }

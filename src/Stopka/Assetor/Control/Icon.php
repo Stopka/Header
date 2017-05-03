@@ -45,8 +45,7 @@ class Icon implements IIcon
 
 	public function setTitle(string $title) : Icon
 	{
-		$this->config['meta']['apple-mobile-web-app-title'] = $title;
-		$this->config['meta']['application-name'] = $title;
+
 		return $this;
 	}
 

@@ -3,10 +3,8 @@
 namespace Stopka\Assetor\Control\Head;
 
 use Nette\Application\UI\Control;
-use Nette\FileNotFoundException;
 use Nette\Utils\Html;
 use Stopka\Assetor\Control\IIcon;
-use Stopka\Assetor\Control\IIconFactory;
 
 /**
  *
@@ -18,51 +16,63 @@ use Stopka\Assetor\Control\IIconFactory;
 class IconControl extends Control implements IHeadComponent {
 
     /** @var IIcon */
-    private $favicon;
+    private $icon;
 
-    /** @var IIconFactory */
-    private $iconFactory;
+    public function __construct($defaultIcon) {
+        parent::__construct();
+        $this->setIcon($defaultIcon);
+    }
 
-    public function __construct(IIconFactory $iconFactory = NULL) {
-        $this->iconFactory = $iconFactory;
+    /**
+     * @param string $filename
+     * @return string[]
+     */
+    protected function getIconPathCandidates(string $filename): array {
+        return [
+            $filename,
+            __DIR__ . DIRECTORY_SEPARATOR . $filename,
+            $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $filename,
+        ];
     }
 
     /**
      * @param string $filename
      */
-    public function setFavicon($filename) {
-        foreach ([
-                     $filename,
-                     __DIR__ . DIRECTORY_SEPARATOR . $filename,
-                     $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $filename,
-                 ] as $path) {
-            if (file_exists($path)) {
-                $this->favicon = ($this->iconFactory instanceof IIconFactory)
-                    ? $this->iconFactory->create(realpath($path))->setTitle((string)$this->getTitle())
-                    : realpath($path);
+    public function setIcon(string $filename) {
+        $this->icon = $filename;
+        /*foreach ($this->getIconPathCandidates($filename) as $pathCandidate) {
+            if (file_exists($pathCandidate)) {
+                $this->icon = ($this->iconFactory instanceof IIconFactory)
+                    ? $this->iconFactory->create(realpath($pathCandidate))->setTitle((string)$this->getTitle())
+                    : realpath($pathCandidate);
                 return $this;
             }
         }
-        throw new FileNotFoundException('Favicon ' . $_SERVER['DOCUMENT_ROOT'] . $filename . ' not found.');
+        throw new FileNotFoundException('Icon ' . $filename . ' not found.');*/
     }
 
-    public function getFavicon() {
-        return $this->favicon;
+    public function getIcon() {
+        return $this->icon;
     }
 
     public function render() {
-        if ($this->favicon === NULL) {
-            try {
-                $this->setFavicon('/favicon.ico');
-            } catch (FileNotFoundException $e) {
-            }
-        }
-
-        if (is_string($this->favicon)) {
-            echo Html::el('link')->rel('shortcut icon')
-                    ->href($this->favicon) . "\n";
-        } elseif ($this->favicon instanceof IIcon) {
-            echo $this->favicon;
-        }
+        $icon = $this->getIcon();
+        echo Html::el('link', [
+                'rel' => 'icon',
+                'href' => $icon
+            ]) . "\n";
+        echo Html::el('link', [
+                'rel' => 'icon',
+                'sizes' => '192x192',
+                'href' => $icon
+            ]) . "\n";
+        echo Html::el('link', [
+                'rel' => 'apple-touch-startup-image',
+                'href' => $icon
+            ]) . "\n";
+        echo Html::el('link', [
+                'rel' => 'apple-touch-icon',
+                'href' => $icon
+            ]) . "\n";
     }
 }

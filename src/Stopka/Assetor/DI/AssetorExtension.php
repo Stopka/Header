@@ -13,6 +13,7 @@ use Stopka\Assetor\Control\Head\IIconControlFactory;
 use Stopka\Assetor\Control\Head\IMetaControlFactory;
 use Stopka\Assetor\Control\Head\ITitleControlFactory;
 use Stopka\Assetor\Control\Head\JsAssetControl;
+use Stopka\Assetor\Control\Head\MetaCollector;
 use Stopka\Assetor\Package\PackageFactory;
 use Stopka\Assetor\Control\IHeadControlFactory;
 use Stopka\Assetor\Control\IHtmlControlFactory;
@@ -27,12 +28,13 @@ use Stopka\Assetor\Control\IHtmlControlFactory;
 class AssetorExtension extends CompilerExtension {
     const SERVICE_GROUP_FACTORY = 'groupFactory';
     const SERVICE_PACKAGE_FACTORY = 'packageFactory';
-    const SERVICE_COLLECTOR = 'collector';
+    const SERVICE_ASSET_COLLECTOR = 'assetCollector';
+    const SERVICE_META_COLLECTOR = 'metaCollector';
     const SERVICE_TITLE_CONTROL_FACTORY = 'titleControlFactory';
     const SERVICE_META_CONTROL_FACTORY = 'metaControlFactory';
     const SERVICE_ICON_CONTROL_FACTORY = 'iconControlFactory';
-    const SERVICE_HTML_CONTROL_FACTORY = 'htmlControlFactory';
-    const SERVICE_HEAD_CONTROL_FACTORY = 'headControlFactory';
+    const SERVICE_HTML_CONTROL_FACTORY = 'htmlControl';
+    const SERVICE_HEAD_CONTROL_FACTORY = 'headControl';
 
     const CONF_GROUP = 'group';
     const CONF_TITLE = 'title';
@@ -103,17 +105,21 @@ class AssetorExtension extends CompilerExtension {
         $builder->addDefinition($this->prefix(self::SERVICE_PACKAGE_FACTORY))
             ->setClass(PackageFactory::class, ['@' . $this->prefix(self::SERVICE_GROUP_FACTORY)]);
 
-        $builder->addDefinition($this->prefix(self::SERVICE_COLLECTOR))
+        $builder->addDefinition($this->prefix(self::SERVICE_ASSET_COLLECTOR))
             ->setClass(AssetsCollector::class, ['@' . $this->prefix(self::SERVICE_PACKAGE_FACTORY)])
             ->addSetup('registerPackages', [$config[self::CONF_PACKAGES]]);
 
+        $builder->addDefinition($this->prefix(self::SERVICE_META_COLLECTOR))
+            ->setClass(MetaCollector::class)
+            ->setArguments([$config[self::CONF_META]]);
+
         $builder->addDefinition($this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY))
             ->setImplement(ITitleControlFactory::class)
-            ->setArguments([$config[self::CONF_TITLE]]);
+            ->setArguments([$config[self::CONF_TITLE]])
+            ->addSetup('setMetaCollector',['@'.$this->prefix(self::SERVICE_META_COLLECTOR)]);
 
         $builder->addDefinition($this->prefix(self::SERVICE_META_CONTROL_FACTORY))
-            ->setImplement(IMetaControlFactory::class)
-            ->setArguments([$config[self::CONF_META]]);
+            ->setImplement(IMetaControlFactory::class);
 
         $builder->addDefinition($this->prefix(self::SERVICE_ICON_CONTROL_FACTORY))
             ->setImplement(IIconControlFactory::class)
@@ -123,7 +129,7 @@ class AssetorExtension extends CompilerExtension {
             ->setImplement(IHeadControlFactory::class)
             ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY),'title'])
             ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_META_CONTROL_FACTORY),'meta'])
-            //->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY),'icon'])
+            ->addSetup('addComponentFactory', ['@' . $this->prefix(self::SERVICE_ICON_CONTROL_FACTORY),'icon'])
             ;
 
         $builder->addDefinition($this->prefix(self::SERVICE_HTML_CONTROL_FACTORY))
