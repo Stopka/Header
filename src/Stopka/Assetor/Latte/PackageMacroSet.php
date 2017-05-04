@@ -19,10 +19,10 @@ class PackageMacroSet extends AbstractMacroSet {
 
     public function macroPackage(MacroNode $node, PhpWriter $writer) {
         $code = <<<'EOT'
-        $service = %assetor.service
-        $service->usePackages(%node.word);
+        $service = %assetor.service;
+        $service->usePackage(%node.word);
         if(%assetor.debug){
-            echo("<!-- assetor-usePackage %node.word -->\n");
+            echo("<!-- assetor-usePackage ".%node.word." -->\n");
         }
 EOT;
         $code = $this->processTokens($code);
