@@ -118,15 +118,15 @@ class AssetsCollector extends Object {
                 try {
                     $selection = $this->getPackage($selectName, true);
                     $providedNames = $selection->getProvides();
-                }catch (PackageException $e){
-                    throw new PackageException("Assetor package '$packagesName' can't select package '$selectName'",0,$e);
+                } catch (PackageException $e) {
+                    throw new PackageException("Assetor package '$packagesName' can't select package '$selectName'", 0, $e);
                 }
                 foreach ($providedNames as $providedName) {
                     try {
                         $provided = $this->getPackage($providedName, true);
                         $provided->select($selectName);
-                    }catch (PackageException $e){
-                        throw new PackageException("Assetor package '$selectName' can't provide package '$providedName'",0,$e);
+                    } catch (PackageException $e) {
+                        throw new PackageException("Assetor package '$selectName' can't provide package '$providedName'", 0, $e);
                     }
                 }
             }
@@ -160,7 +160,7 @@ class AssetsCollector extends Object {
     }
 
     /**
-     * @return IPackage[]
+     * @return string[]
      */
     public function getDependentPackages(): array {
         if (!$this->dependentPackages) {
@@ -174,11 +174,13 @@ class AssetsCollector extends Object {
      * @return BaseAsset[]
      */
     public function getAssets(string $groupName): array {
-        $assets = [];
-        foreach ($this->getDependentPackages() as $dependentPackage) {
-            $assets += $dependentPackage->getAssets($groupName);
+        $result = [];
+        foreach ($this->getDependentPackages() as $packageName) {
+            $package = $this->getPackage($packageName, true);
+            $assets = $package->getAssets($groupName);
+            $result = array_merge($result, $assets);
         }
-        return $assets;
+        return $result;
     }
 
 

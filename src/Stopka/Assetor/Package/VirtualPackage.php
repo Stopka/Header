@@ -47,7 +47,7 @@ class VirtualPackage extends Object implements IPackage {
      * @return string[]
      */
     public function getDependencies(): array {
-        return [$this->selected];
+        return [$this->getSelected()];
     }
 
     /**
