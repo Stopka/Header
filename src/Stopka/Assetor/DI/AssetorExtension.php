@@ -17,7 +17,9 @@ use Stopka\Assetor\Control\Head\IMetaControlFactory;
 use Stopka\Assetor\Control\Head\ITitleControlFactory;
 use Stopka\Assetor\Control\Head\JsAssetControl;
 use Stopka\Assetor\Control\Head\MetaCollector;
-use Stopka\Assetor\Latte\PackageMacro;
+use Stopka\Assetor\Latte\CssAssetMacroSet;
+use Stopka\Assetor\Latte\JsAssetMacroSet;
+use Stopka\Assetor\Latte\PackageMacroSet;
 use Stopka\Assetor\Package\PackageFactory;
 use Stopka\Assetor\Control\IHeadControlFactory;
 use Stopka\Assetor\Control\IHtmlControlFactory;
@@ -152,7 +154,9 @@ class AssetorExtension extends CompilerExtension {
         $self = $this;
         $registerToLatte = function (ServiceDefinition $def) use ($self) {
             $def
-                ->addSetup('?->onCompile[] = function($engine) { ' . PackageMacro::class . '::install($engine->getCompiler()); }', array('@self'));
+                ->addSetup('?->onCompile[] = function($engine) { ' . PackageMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
+                ->addSetup('?->onCompile[] = function($engine) { ' . JsAssetMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
+                ->addSetup('?->onCompile[] = function($engine) { ' . CssAssetMacroSet::class . '::install($engine->getCompiler()); }', array('@self'));
         };
 
         if ($builder->hasDefinition('nette.latteFactory')) {
