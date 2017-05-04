@@ -21,9 +21,6 @@ class AssetsCollector extends Object {
     /** @var  IPackageFactory */
     protected $packageFactory;
 
-    /** @var AssetCollectionGroup directly attached files */
-    protected $collectionGroup;
-
     /** @var IPackage[] */
     private $packages;
 
@@ -183,5 +180,17 @@ class AssetsCollector extends Object {
         return $result;
     }
 
+    /**
+     * @param string $groupName
+     * @param string $content
+     * @param array $params
+     */
+    public function addContent(string $groupName, string $content, array $params = []): void {
+        $package = $this->packageFactory->create($params);
+        $package->addContent($groupName, $content);
+        $packageName = 'content:' . sha1($content);
+        $this->registerPackage($packageName, $package);
+        $this->usePackage($packageName);
+    }
 
 }

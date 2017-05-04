@@ -38,4 +38,18 @@ interface IPackage {
      * @return BaseAsset[]
      */
     public function getAssets(string $groupName): array;
+
+    /**
+     * @param string $groupName
+     * @param string $content
+     * @return IPackage
+     */
+    public function addContent(string $groupName, string $content): self;
+
+    /**
+     * @param string $groupName
+     * @param string $file
+     * @return IPackage
+     */
+    public function addFile(string $groupName, string $file): self;
 }

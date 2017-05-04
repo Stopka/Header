@@ -4,6 +4,8 @@ namespace Stopka\Assetor\Control\Head;
 
 use Nette\Utils\Html;
 use Stopka\Assetor\Asset\BaseAsset;
+use Stopka\Assetor\Asset\ContentAsset;
+use Stopka\Assetor\Asset\FileAsset;
 
 /**
  * @author Štěpán Škorpil
@@ -19,8 +21,13 @@ class JsAssetControl extends AbstractAssetControl {
     }
 
     protected function renderAsset(BaseAsset $item): void {
-        $link = Html::el('script');
-        $link->attrs['src'] = $item->getFile();
-        echo $link . "\n";
+        $element = Html::el('script');
+        if ($item instanceof FileAsset) {
+            $element->setAttribute('src', $item->getFile());
+        }
+        if ($item instanceof ContentAsset) {
+            $element->setHtml($item->getContent());
+        }
+        echo $element . "\n";
     }
 }

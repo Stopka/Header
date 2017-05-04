@@ -4,6 +4,8 @@ namespace Stopka\Assetor\Control\Head;
 
 use Nette\Utils\Html;
 use Stopka\Assetor\Asset\BaseAsset;
+use Stopka\Assetor\Asset\ContentAsset;
+use Stopka\Assetor\Asset\FileAsset;
 
 /**
  * @author Štěpán Škorpil
@@ -19,9 +21,17 @@ class CssAssetControl extends AbstractAssetControl {
     }
 
     protected function renderAsset(BaseAsset $item): void {
-        $link = Html::el('link');
-        $link->attrs['rel'] = 'stylesheet';
-        $link->attrs['href'] = $item->getFile();;
-        echo $link . "\n";
+        $element = "";
+        if ($item instanceof FileAsset) {
+            $element = Html::el('link', [
+                'rel' => 'stylesheet',
+                'href' => $item->getFile()
+            ]);
+        }
+        if ($item instanceof ContentAsset) {
+            $element = Html::el('style')
+                ->setHtml($item->getContent());
+        }
+        echo $element . "\n";
     }
 }

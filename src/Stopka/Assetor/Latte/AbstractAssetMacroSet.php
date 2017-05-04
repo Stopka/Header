@@ -4,7 +4,6 @@ namespace Stopka\Assetor\Latte;
 
 use Latte\MacroNode;
 use Latte\PhpWriter;
-use Stopka\Assetor\Collector\AssetsCollector;
 
 /**
  * Class defined macros for AssetsCollector.
@@ -19,11 +18,14 @@ abstract class AbstractAssetMacroSet extends AbstractMacroSet {
     public function addMacros(): void {
         $groupId = $this->getAssetGroupId();
         $this->addMacro($groupId . 'File', [$this, 'macroFileBegin'], NULL);
-        $this->addMacro($groupId . 'Content', [$this, 'macroContentBegin'], [$this, 'macroContentEnd']);
+        $this->addMacro($groupId . 'Content', [$this, 'macroContentBegin'], [$this, 'macroContentEnd'], NULL);
     }
 
     public function macroFileBegin(MacroNode $node, PhpWriter $writer) {
         $code = <<<'EOT'
+        $service = %assetor.service;
+        $file = %node.word
+        $service->addFile('%assetor.groupId',$file,%node.array);
         if(%assetor.debug){
             echo("<!-- assetor-%assetor.groupIdFile %node.array -->"); 
         }
@@ -45,6 +47,7 @@ EOT;
         $content = ob_get_contents();
         ob_end_clean();
         $service = %assetor.service;
+        $service->addContent('%assetor.groupId',$content,%node.array);
         if(%assetor.debug){
             echo("<!-- assetor-%assetor.groupIdContent %node.array -->\n");
         }

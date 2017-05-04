@@ -84,6 +84,7 @@ class AssetPackage implements IPackage {
     /**
      * @param string $packageName
      * @return IPackage
+     * @throws NotSupportedException
      */
     public function select(string $packageName): IPackage {
         throw new NotSupportedException("Assetor package of type asset can't be in 'provides' statement");
@@ -95,5 +96,25 @@ class AssetPackage implements IPackage {
      */
     public function getAssets(string $groupName): array {
         return $this->getAssetCollectionGroup()->getAssets($groupName);
+    }
+
+    /**
+     * @param string $groupName
+     * @param string $content
+     * @return IPackage
+     */
+    public function addContent(string $groupName, string $content): IPackage {
+        $this->getAssetCollectionGroup()->addContent($groupName, $content);
+        return $this;
+    }
+
+    /**
+     * @param string $groupName
+     * @param string $file
+     * @return IPackage
+     */
+    public function addFile(string $groupName, string $file): IPackage {
+        $this->getAssetCollectionGroup()->addFile($groupName, $file);
+        return $this;
     }
 }

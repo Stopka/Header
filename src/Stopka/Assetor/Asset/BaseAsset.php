@@ -17,6 +17,5 @@ use Nette\Object;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class BaseAsset extends Object {
-
+abstract class BaseAsset extends Object {
 }

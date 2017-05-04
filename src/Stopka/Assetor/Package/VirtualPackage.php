@@ -1,8 +1,8 @@
 <?php
 
 namespace Stopka\Assetor\Package;
-use Nette\NotSupportedException;
 use Nette\Object;
+use Stopka\Assetor\Asset\BaseAsset;
 
 /**
  * Virtual package
@@ -59,14 +59,37 @@ class VirtualPackage extends Object implements IPackage {
 
     /**
      * @return string[] package names
+     * @throws NotSupportedException
      */
     public function getProvides(): array {
         throw new NotSupportedException("Assetor package of type virtual can't be used in 'selects' statement!");
     }
 
+    /**
+     * @param string $groupName
+     * @return BaseAsset[]
+     */
     public function getAssets(string $groupName): array {
         return [];
     }
 
+    /**
+     * @param string $groupName
+     * @param string $content
+     * @return IPackage
+     * @throws NotSupportedException
+     */
+    public function addContent(string $groupName, string $content): IPackage {
+        throw new NotSupportedException("Assetor package of type virtual can't have contents");
+    }
 
+    /**
+     * @param string $groupName
+     * @param string $file
+     * @return IPackage
+     * @throws NotSupportedException
+     */
+    public function addFile(string $groupName, string $file): IPackage {
+        throw new NotSupportedException("Assetor package of type virtual can't have files");
+    }
 }
