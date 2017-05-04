@@ -3,7 +3,6 @@
 namespace Stopka\Assetor\Package;
 use Nette\NotSupportedException;
 use Nette\Object;
-use Stopka\Assetor\Asset\BaseAsset;
 
 /**
  * Virtual package
@@ -62,7 +61,7 @@ class VirtualPackage extends Object implements IPackage {
      * @return string[] package names
      */
     public function getProvides(): array {
-        throw new NotSupportedException("Virtual assetor package can't be used in 'selects' statement!");
+        throw new NotSupportedException("Assetor package of type virtual can't be used in 'selects' statement!");
     }
 
     public function getAssets(string $groupName): array {

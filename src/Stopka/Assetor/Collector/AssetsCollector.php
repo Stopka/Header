@@ -5,6 +5,8 @@ namespace Stopka\Assetor\Collector;
 use Nette\Object;
 use Nette\InvalidArgumentException;
 use Stopka\Assetor\Asset\BaseAsset;
+use Stopka\Assetor\Package\NotFoundException;
+use Stopka\Assetor\Package\PackageException;
 use Stopka\Assetor\Package\IPackage;
 use Stopka\Assetor\Package\IPackageFactory;
 
@@ -46,7 +48,7 @@ class AssetsCollector extends Object {
 
     public function getPackage(string $name, bool $needed = false): ?IPackage {
         if ($needed && !isset($this->packages[$name])) {
-            throw new InvalidArgumentException("Assetor package '$name' not found");
+            throw new NotFoundException("Assetor package '$name' not found");
         }
         return $this->packages[$name] ?? NULL;
     }
@@ -112,11 +114,19 @@ class AssetsCollector extends Object {
             $package = $this->getPackage($packagesName, true);
             $selectNames = $package->getSelects();
             foreach ($selectNames as $selectName) {
-                $selection = $this->getPackage($selectName, true);
-                $providedNames = $selection->getProvides();
+                try {
+                    $selection = $this->getPackage($selectName, true);
+                    $providedNames = $selection->getProvides();
+                }catch (PackageException $e){
+                    throw new PackageException("Assetor package '$packagesName' can't select package '$selectName'",0,$e);
+                }
                 foreach ($providedNames as $providedName) {
-                    $provided = $this->getPackage($providedName);
-                    $provided->select($selectName);
+                    try {
+                        $provided = $this->getPackage($providedName, true);
+                        $provided->select($selectName);
+                    }catch (PackageException $e){
+                        throw new PackageException("Assetor package '$selectName' can't provide package '$providedName'",0,$e);
+                    }
                 }
             }
         }

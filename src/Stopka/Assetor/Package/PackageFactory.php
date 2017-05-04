@@ -13,7 +13,7 @@ use Nette\Object;
 use Stopka\Assetor\Collector\IAssetCollectionGroupFactory;
 
 class PackageFactory extends Object implements IPackageFactory {
-    const CONFIG_VIRTUAL = 'virtualizes';
+    const CONFIG_VIRTUAL = 'defaults';
     const CONFIG_EXTEND = 'extends';
     const CONFIG_PROVIDE = 'provides';
     const CONFIG_SELECT = 'selects';

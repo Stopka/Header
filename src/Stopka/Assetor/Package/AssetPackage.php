@@ -2,7 +2,6 @@
 
 namespace Stopka\Assetor\Package;
 
-use Nette\NotSupportedException;
 use Stopka\Assetor\Asset\BaseAsset;
 use Stopka\Assetor\Collector\AssetCollectionGroup;
 
@@ -87,7 +86,7 @@ class AssetPackage implements IPackage {
      * @return IPackage
      */
     public function select(string $packageName): IPackage {
-        throw new NotSupportedException("Asset assetor package can't be in 'provides' statement");
+        throw new NotSupportedException("Assetor package of type asset can't be in 'provides' statement");
     }
 
     /**

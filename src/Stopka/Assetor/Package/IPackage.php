@@ -21,6 +21,7 @@ interface IPackage {
     public function getSelects(): array;
 
     /**
+     * @throws NotSupportedException
      * @return string[] package names
      */
     public function getProvides(): array;
@@ -28,6 +29,7 @@ interface IPackage {
     /**
      * @param string $packageName
      * @return self
+     * @throws NotSupportedException
      */
     public function select(string $packageName): self;
 
