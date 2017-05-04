@@ -3,9 +3,9 @@
 namespace Stopka\Assetor\Collector;
 
 use Nette\Object;
-use Nette\InvalidArgumentException;
 use Stopka\Assetor\Asset\BaseAsset;
 use Stopka\Assetor\Package\NotFoundException;
+use Stopka\Assetor\Package\NotSupportedException;
 use Stopka\Assetor\Package\PackageException;
 use Stopka\Assetor\Package\IPackage;
 use Stopka\Assetor\Package\IPackageFactory;
@@ -94,18 +94,19 @@ class AssetsCollector extends Object {
     private function resolveDependeciesRecursively(string $packageName, array &$resolved, array &$unresolved) {
         $unresolved[] = $packageName;
         $package = $this->getPackage($packageName, true);
-        foreach ($package->getDependencies() as $dependecy) {
-            if (!in_array($dependecy, $resolved)) {
-                if (in_array($dependecy, $unresolved)) {
-                    throw new InvalidArgumentException("Circular reference detected: $packageName -> $dependecy");
-                }
-                $this->resolveDependeciesRecursively($packageName, $resolved, $unresolved);
+        foreach ($package->getDependencies() as $dependecyName) {
+            if (in_array($dependecyName, $resolved)) {
+                continue;
             }
-            $resolved[] = $packageName;
-            $index = array_search($packageName, $unresolved);
-            if ($index) {
-                unset($unresolved[$index]);
+            if (in_array($dependecyName, $unresolved)) {
+                throw new NotSupportedException("Circular extends statement detected: $packageName -> $dependecyName");
             }
+            $this->resolveDependeciesRecursively($dependecyName, $resolved, $unresolved);
+        }
+        $resolved[] = $packageName;
+        $index = array_search($packageName, $unresolved);
+        if ($index) {
+            unset($unresolved[$index]);
         }
     }
 
@@ -139,8 +140,8 @@ class AssetsCollector extends Object {
     private function resolveDependecies(array $packageNames): array {
         $this->resolveSelection($packageNames);
         $resolved = [];
+        $unresolved = [];
         foreach ($packageNames as $packageName) {
-            $unresolved = [];
             $this->resolveDependeciesRecursively($packageName, $resolved, $unresolved);
         }
         return $resolved;
