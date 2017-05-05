@@ -185,12 +185,17 @@ class AssetsCollector extends Object {
      * @param string $content
      * @param array $params
      */
-    public function addContent(string $groupName, string $content, array $params = []): void {
+    public function addContent(string $groupName, string $content, array $params = []): string {
+        $packageName = $params['name'] ?? 'content_' . sha1($content);
+        $use = $params['use'] ?? true;
+        unset($params['name'],$params['use']);
         $package = $this->packageFactory->create($params);
         $package->addContent($groupName, $content);
-        $packageName = 'content:' . sha1($content);
         $this->registerPackage($packageName, $package);
-        $this->usePackage($packageName);
+        if($use){
+            $this->usePackage($packageName);
+        }
+        return $packageName;
     }
 
 }

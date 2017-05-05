@@ -2,6 +2,7 @@
 
 namespace Stopka\Assetor\Latte;
 
+use Latte\CompileException;
 use Latte\MacroNode;
 use Latte\PhpWriter;
 
@@ -18,7 +19,7 @@ abstract class AbstractAssetMacroSet extends AbstractMacroSet {
     public function addMacros(): void {
         $groupId = $this->getAssetGroupId();
         $this->addMacro($groupId . 'File', [$this, 'macroFileBegin'], NULL);
-        $this->addMacro($groupId . 'Content', [$this, 'macroContentBegin'], [$this, 'macroContentEnd'], NULL);
+        $this->addMacro($groupId . 'Content', [$this, 'macroContentBegin'], [$this, 'macroContentEnd']);
     }
 
     public function macroFileBegin(MacroNode $node, PhpWriter $writer) {
@@ -35,6 +36,15 @@ EOT;
     }
 
     public function macroContentBegin(MacroNode $node, PhpWriter $writer) {
+        if($node->prefix===$node::PREFIX_TAG){
+            throw new CompileException('Unknown ' . $node->getNotation() . ", use n:".$node->name." attribute.");
+        }
+        if($node->htmlNode && $node->htmlNode->name != $this->getContentTagName()){
+            throw new CompileException("Macro " . $node->getNotation() . " can be used on <style> element only");
+        }
+        if ($node->modifiers) {
+            throw new CompileException('Modifiers are not allowed in ' . $node->getNotation());
+        }
         $code = <<<'EOT'
         ob_start();
 EOT;
@@ -47,14 +57,19 @@ EOT;
         $content = ob_get_contents();
         ob_end_clean();
         $service = %assetor.service;
-        $service->addContent('%assetor.groupId',$content,%node.array);
+        $packageName = $service->addContent('%assetor.groupId',$content,%node.array);
         if(%assetor.debug){
-            echo("<!-- assetor-%assetor.groupIdContent %node.array -->\n");
+            echo("<!-- assetor-%assetor.groupIdContent $packageName -->\n");
         }
 EOT;
+        if($node->htmlNode && $node->prefix==$node::PREFIX_NONE){
+            //\Tracy\Debugger::barDump($node);
+        }
         $code = $this->processTokens($code);
         return $writer->write($code);
     }
+
+    abstract protected function getContentTagName();
 
     protected function getTokens(): array {
         $tokens = parent::getTokens();

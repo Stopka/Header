@@ -25,15 +25,20 @@ class HeadControl extends Control {
     /** @var  IHeadComponentFactory[] */
     private $componentFactories;
 
-    public function render() {
+    public function render($headers = null) {
         $this->renderBegin();
         $this->renderContents();
+        $this->renderAdditionals($headers);
         $this->renderEnd();
     }
 
     public function renderBegin() {
         echo Html::el('head')->startTag();
         echo "\n";
+    }
+
+    public function renderAdditionals($headers = null){
+        echo $headers;
     }
 
     public function renderContents() {

@@ -18,4 +18,7 @@ class JsAssetMacroSet extends AbstractAssetMacroSet {
     }
 
 
+    protected function getContentTagName() {
+        return 'script';
+    }
 }

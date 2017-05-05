@@ -84,9 +84,9 @@ class HtmlControl extends Control {
         return '<!DOCTYPE html>';
     }
 
-    public function render($body) {
+    public function render($body, $headers = null) {
         $this->renderBegin();
-        $this->renderHead();
+        $this->renderHead($headers);
         $this->renderBody($body);
         $this->renderEnd();
     }
@@ -101,10 +101,10 @@ class HtmlControl extends Control {
         echo $this->getHtmlTag()->endTag();
     }
 
-    public function renderHead() {
+    public function renderHead($headers = null) {
         /** @var HeadControl $head */
         $head = $this->getComponent('head');
-        $head->render();
+        $head->render($headers);
     }
 
     public function renderBody($body) {

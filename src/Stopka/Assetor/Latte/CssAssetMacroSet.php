@@ -16,4 +16,8 @@ class CssAssetMacroSet extends AbstractAssetMacroSet {
     protected function getAssetGroupId(): string {
         return CssAssetControl::GROUP_ID;
     }
+
+    protected function getContentTagName() {
+        return 'style';
+    }
 }
