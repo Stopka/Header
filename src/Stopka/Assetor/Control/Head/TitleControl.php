@@ -4,6 +4,7 @@ namespace Stopka\Assetor\Control\Head;
 
 use Nette\Application\UI\Control;
 use Nette\Utils\Html;
+use Stopka\Assetor\Collector\ITitleCollector;
 
 /**
  * @author Štěpán Škorpil
@@ -14,97 +15,40 @@ use Nette\Utils\Html;
  * @package HeaderControl
  */
 class TitleControl extends Control implements IHeadComponent {
-    const META_APP_TITLES = ['apple-mobile-web-app-title', 'application-name'];
 
     /** @var string title separator */
-    private $separator = '';
+    private $separator = ' - ';
 
     /** @var bool whether title should be rendered in reverse order or not */
     private $reverseOrder = TRUE;
 
-    /** @var string[] document hierarchical titles */
-    private $titles = array('');
-
-    /** @var  IMetaCollector|null */
-    private $metaCollector;
+    /** @var ITitleCollector */
+    private $titleCollector;
 
     /**
      * TitleControl constructor.
-     * @param string $defaultTitle
+     * @param ITitleCollector $titleCollector
      */
-    public function __construct(string $defaultTitle = '') {
+    public function __construct(ITitleCollector $titleCollector) {
         parent::__construct();
-        $this->setTitle($defaultTitle);
+        $this->setTitleCollector($titleCollector);
     }
 
     /**
-     * @param IMetaCollector|null $metaCollector
+     * @return ITitleCollector
+     */
+    public function getTitleCollector(): ITitleCollector {
+        return $this->titleCollector;
+    }
+
+    /**
+     * @param ITitleCollector $titleCollector
      * @return self
      */
-    public function setMetaCollector(?IMetaCollector $metaCollector): self {
-        $this->metaCollector = $metaCollector;
-        $this->updateMeta();
+    public function setTitleCollector(ITitleCollector $titleCollector): self {
+        $this->titleCollector = $titleCollector;
+
         return $this;
-    }
-
-    protected function updateMeta() {
-        if (!$this->metaCollector) {
-            return;
-        }
-        $appTitle = $this->getTitle(0);
-        foreach (self::META_APP_TITLES as $name) {
-            $this->metaCollector->setMeta($name, $appTitle);
-        }
-    }
-
-
-    /**
-     * @param string $title
-     * @param int|null $index
-     * @return self
-     */
-    public function setTitle(string $title, int $index = null): self {
-        if ($index === null) {
-            $this->titles = [$title];
-        } else {
-            $this->titles[$index] = $title;
-        }
-        $this->updateMeta();
-        return $this; //fluent interface
-    }
-
-    /**
-     * @param int|null $index
-     * @return string|null
-     */
-    public function getTitle(int $index = null): string {
-        if ($index === null) {
-            return $this->getTitle(count($this->titles) - 1);
-        }
-        if (!isset($this->titles[$index])) {
-            return '';
-        }
-        return (string)$this->titles[$index];
-    }
-
-    /**
-     * @param string $title
-     * @return self
-     */
-    public function addTitle(string $title): self {
-        if(count($this->titles)==1&&!$this->titles[0]){
-            return $this->setTitle($title);
-        }
-        $this->titles[] = $title;
-        $this->updateMeta();
-        return $this;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getTitles(): array {
-        return $this->titles;
     }
 
     /**
@@ -141,7 +85,7 @@ class TitleControl extends Control implements IHeadComponent {
      * @return string
      */
     public function getTitleString(): string {
-        $titles = $this->getTitles();
+        $titles = $this->getTitleCollector()->getTitles();
         if ($this->isOrderReversed()) {
             $titles = array_reverse($titles);
         }

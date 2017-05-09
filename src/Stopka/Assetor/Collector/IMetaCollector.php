@@ -1,6 +1,6 @@
 <?php
 
-namespace Stopka\Assetor\Control\Head;
+namespace Stopka\Assetor\Collector;
 
 /**
  * @copyright (c) Roman Mátyus 2015

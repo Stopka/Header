@@ -21,7 +21,9 @@ class JsAssetControl extends AbstractAssetControl {
     }
 
     protected function renderAsset(BaseAsset $item): void {
-        $element = Html::el('script');
+        $element = Html::el('script',[
+            'type'=>'text/javascript'
+        ]);
         if ($item instanceof FileAsset) {
             $element->setAttribute('src', $item->getFile());
         }

@@ -102,7 +102,7 @@ class AssetsCollector extends Object {
         }
         $resolved[] = $packageName;
         $index = array_search($packageName, $unresolved);
-        if ($index) {
+        if ($index!==false) {
             unset($unresolved[$index]);
         }
     }
@@ -141,6 +141,7 @@ class AssetsCollector extends Object {
         foreach ($packageNames as $packageName) {
             $this->resolveDependeciesRecursively($packageName, $resolved, $unresolved);
         }
+        //\Tracy\Debugger::barDump($resolved,'resolved');
         return $resolved;
     }
 

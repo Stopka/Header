@@ -14,7 +14,7 @@ use Latte\PhpWriter;
  */
 class PackageMacroSet extends AbstractMacroSet {
     public function addMacros(): void {
-        $this->addMacro('usePackage', [$this, 'macroPackage'], NULL, [$this, 'macroPackage']);
+        $this->addMacro('usePackage', [$this, 'macroPackage']);
     }
 
     public function macroPackage(MacroNode $node, PhpWriter $writer) {

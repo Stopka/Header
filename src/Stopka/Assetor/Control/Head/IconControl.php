@@ -4,7 +4,7 @@ namespace Stopka\Assetor\Control\Head;
 
 use Nette\Application\UI\Control;
 use Nette\Utils\Html;
-use Stopka\Assetor\Control\IIcon;
+use Stopka\Assetor\Collector\IIconCollector;
 
 /**
  *
@@ -15,55 +15,35 @@ use Stopka\Assetor\Control\IIcon;
  */
 class IconControl extends Control implements IHeadComponent {
 
-    /** @var IIcon */
-    private $icon;
+    /** @var IIconCollector */
+    private $iconCollector;
 
-    public function __construct($defaultIcon) {
+    public function __construct(IIconCollector $iconCollector) {
         parent::__construct();
-        $this->setIcon($defaultIcon);
+        $this->setIconCollector($iconCollector);
     }
 
     /**
-     * @param string $filename
-     * @return string[]
+     * @return IIconCollector
      */
-    protected function getIconPathCandidates(string $filename): array {
-        return [
-            $filename,
-            __DIR__ . DIRECTORY_SEPARATOR . $filename,
-            $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . $filename,
-        ];
+    public function getIconCollector(): IIconCollector {
+        return $this->iconCollector;
     }
 
     /**
-     * @param string $filename
+     * @param IIconCollector $iconCollector
      */
-    public function setIcon(string $filename) {
-        $this->icon = $filename;
-        /*foreach ($this->getIconPathCandidates($filename) as $pathCandidate) {
-            if (file_exists($pathCandidate)) {
-                $this->icon = ($this->iconFactory instanceof IIconFactory)
-                    ? $this->iconFactory->create(realpath($pathCandidate))->setTitle((string)$this->getTitle())
-                    : realpath($pathCandidate);
-                return $this;
-            }
-        }
-        throw new FileNotFoundException('Icon ' . $filename . ' not found.');*/
-    }
-
-    public function getIcon() {
-        return $this->icon;
+    public function setIconCollector(IIconCollector $iconCollector) {
+        $this->iconCollector = $iconCollector;
     }
 
     public function render() {
-        $icon = $this->getIcon();
+        $icon = $this->getIconCollector()->getIcon();
+        if (!$icon) {
+            return;
+        }
         echo Html::el('link', [
                 'rel' => 'icon',
-                'href' => $icon
-            ]) . "\n";
-        echo Html::el('link', [
-                'rel' => 'icon',
-                'sizes' => '192x192',
                 'href' => $icon
             ]) . "\n";
         echo Html::el('link', [

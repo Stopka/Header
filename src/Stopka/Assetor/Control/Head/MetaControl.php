@@ -4,6 +4,7 @@ namespace Stopka\Assetor\Control\Head;
 
 use Nette\Application\UI\Control;
 use Nette\Utils\Html;
+use Stopka\Assetor\Collector\IMetaCollector;
 
 /**
  *

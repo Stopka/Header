@@ -9,6 +9,8 @@ use Nette\DI\Config\Helpers;
 use Nette\DI\ServiceDefinition;
 use Stopka\Assetor\Collector\AssetCollectionGroupFactory;
 use Stopka\Assetor\Collector\AssetsCollector;
+use Stopka\Assetor\Collector\IconCollector;
+use Stopka\Assetor\Collector\TitleCollector;
 use Stopka\Assetor\Control\Head\CssAssetControl;
 use Stopka\Assetor\Control\Head\ICssAssetControlFactory;
 use Stopka\Assetor\Control\Head\IIconControlFactory;
@@ -16,10 +18,11 @@ use Stopka\Assetor\Control\Head\IJsAssetControlFactory;
 use Stopka\Assetor\Control\Head\IMetaControlFactory;
 use Stopka\Assetor\Control\Head\ITitleControlFactory;
 use Stopka\Assetor\Control\Head\JsAssetControl;
-use Stopka\Assetor\Control\Head\MetaCollector;
+use Stopka\Assetor\Collector\MetaCollector;
 use Stopka\Assetor\Latte\CssAssetMacroSet;
 use Stopka\Assetor\Latte\JsAssetMacroSet;
 use Stopka\Assetor\Latte\PackageMacroSet;
+use Stopka\Assetor\Latte\TitleMacroSet;
 use Stopka\Assetor\Package\PackageFactory;
 use Stopka\Assetor\Control\IHeadControlFactory;
 use Stopka\Assetor\Control\IHtmlControlFactory;
@@ -34,8 +37,11 @@ use Stopka\Assetor\Control\IHtmlControlFactory;
 class AssetorExtension extends CompilerExtension {
     const SERVICE_GROUP_FACTORY = 'groupFactory';
     const SERVICE_PACKAGE_FACTORY = 'packageFactory';
+
     const SERVICE_ASSET_COLLECTOR = 'assetCollector';
     const SERVICE_META_COLLECTOR = 'metaCollector';
+    const SERVICE_TITLE_COLLECTOR = 'titleCollector';
+    const SERVICE_ICON_COLLECTOR = 'iconCollector';
 
     const SERVICE_TITLE_CONTROL_FACTORY = 'titleControlFactory';
     const SERVICE_META_CONTROL_FACTORY = 'metaControlFactory';
@@ -86,29 +92,6 @@ class AssetorExtension extends CompilerExtension {
 
         $config = $this->getMergedConfig();
 
-        /*$builder->addDefinition($this->prefix('cssSimpleMinificator'))
-            ->setClass('RM\AssetsCollector\Compilers\CssSimpleMinificator');
-
-        $builder->addDefinition($this->prefix('imageToDataStream'))
-            ->setClass('RM\AssetsCollector\Compilers\ImageToDataStream')
-            ->addSetup('$cssPath', array($config['cssPath']))
-            ->addSetup('$wwwDir', array($config['wwwDir']))
-            ->addSetup('$maxSize', array($config['maxSize']));
-
-        $builder->addDefinition($this->prefix('imageReplacer'))
-            ->setClass('RM\AssetsCollector\Compilers\ImageReplacer')
-            ->addSetup('$cssPath', array($config['cssPath']))
-            ->addSetup('$wwwDir', array($config['wwwDir']))
-            ->addSetup('$webTemp', array($config['webTemp']));
-
-        $config = array_merge($config, array(
-            'addCssCompiler' => array(
-                '@' . $this->prefix('cssSimpleMinificator'),
-                '@' . $this->prefix('imageToDataStream'),
-                '@' . $this->prefix('imageReplacer'),
-            ),
-        ));
-*/
         $builder->addDefinition($this->prefix(self::SERVICE_GROUP_FACTORY))
             ->setClass(AssetCollectionGroupFactory::class, [$config[self::CONF_GROUP]]);
 
@@ -123,17 +106,23 @@ class AssetorExtension extends CompilerExtension {
             ->setClass(MetaCollector::class)
             ->setArguments([$config[self::CONF_META]]);
 
-        $builder->addDefinition($this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY))
-            ->setImplement(ITitleControlFactory::class)
+        $builder->addDefinition($this->prefix(self::SERVICE_TITLE_COLLECTOR))
+            ->setClass(TitleCollector::class)
             ->setArguments([$config[self::CONF_TITLE]])
             ->addSetup('setMetaCollector', ['@' . $this->prefix(self::SERVICE_META_COLLECTOR)]);
+
+        $builder->addDefinition($this->prefix(self::SERVICE_ICON_COLLECTOR))
+            ->setClass(IconCollector::class)
+            ->setArguments([$config[self::CONF_ICON]]);
+
+        $builder->addDefinition($this->prefix(self::SERVICE_TITLE_CONTROL_FACTORY))
+            ->setImplement(ITitleControlFactory::class);
 
         $builder->addDefinition($this->prefix(self::SERVICE_META_CONTROL_FACTORY))
             ->setImplement(IMetaControlFactory::class);
 
         $builder->addDefinition($this->prefix(self::SERVICE_ICON_CONTROL_FACTORY))
-            ->setImplement(IIconControlFactory::class)
-            ->setArguments([$config[self::CONF_ICON]]);
+            ->setImplement(IIconControlFactory::class);
 
         $builder->addDefinition($this->prefix(self::SERVICE_CSS_ASSET_CONTROL_FACTORY))
             ->setImplement(ICssAssetControlFactory::class);
@@ -156,7 +145,8 @@ class AssetorExtension extends CompilerExtension {
             $def
                 ->addSetup('?->onCompile[] = function($engine) { ' . PackageMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
                 ->addSetup('?->onCompile[] = function($engine) { ' . JsAssetMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
-                ->addSetup('?->onCompile[] = function($engine) { ' . CssAssetMacroSet::class . '::install($engine->getCompiler()); }', array('@self'));
+                ->addSetup('?->onCompile[] = function($engine) { ' . CssAssetMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
+                ->addSetup('?->onCompile[] = function($engine) { ' . TitleMacroSet::class . '::install($engine->getCompiler()); }', array('@self'));
         };
 
         if ($builder->hasDefinition('nette.latteFactory')) {

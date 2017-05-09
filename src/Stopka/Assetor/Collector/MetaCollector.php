@@ -1,6 +1,6 @@
 <?php
 
-namespace Stopka\Assetor\Control\Head;
+namespace Stopka\Assetor\Collector;
 
 use Nette\InvalidArgumentException;
 use Nette\Object;
