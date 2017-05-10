@@ -20,7 +20,9 @@ use Stopka\Assetor\Control\Head\ITitleControlFactory;
 use Stopka\Assetor\Control\Head\JsAssetControl;
 use Stopka\Assetor\Collector\MetaCollector;
 use Stopka\Assetor\Latte\CssAssetMacroSet;
+use Stopka\Assetor\Latte\IconMacroSet;
 use Stopka\Assetor\Latte\JsAssetMacroSet;
+use Stopka\Assetor\Latte\MetaMacroSet;
 use Stopka\Assetor\Latte\PackageMacroSet;
 use Stopka\Assetor\Latte\TitleMacroSet;
 use Stopka\Assetor\Package\PackageFactory;
@@ -146,6 +148,8 @@ class AssetorExtension extends CompilerExtension {
                 ->addSetup('?->onCompile[] = function($engine) { ' . PackageMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
                 ->addSetup('?->onCompile[] = function($engine) { ' . JsAssetMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
                 ->addSetup('?->onCompile[] = function($engine) { ' . CssAssetMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
+                ->addSetup('?->onCompile[] = function($engine) { ' . MetaMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
+                ->addSetup('?->onCompile[] = function($engine) { ' . IconMacroSet::class . '::install($engine->getCompiler()); }', array('@self'))
                 ->addSetup('?->onCompile[] = function($engine) { ' . TitleMacroSet::class . '::install($engine->getCompiler()); }', array('@self'));
         };
 
