@@ -7,7 +7,7 @@ use Latte\PhpWriter;
 use Stopka\Assetor\Collector\IMetaCollector;
 
 /**
- * Icon setting macro
+ * Meta controling macro
  *
  * @author Štěpán Škorpil
  * @license MIT

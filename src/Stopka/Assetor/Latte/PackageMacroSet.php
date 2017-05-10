@@ -6,10 +6,9 @@ use Latte\MacroNode;
 use Latte\PhpWriter;
 
 /**
- * Class defined macros for AssetsCollector.
+ * Package controling macro
  *
- * @author Roman Mátyus
- * @copyright (c) Roman Mátyus 2012
+ * @author Štěpán Škorpil
  * @license MIT
  */
 class PackageMacroSet extends AbstractMacroSet {

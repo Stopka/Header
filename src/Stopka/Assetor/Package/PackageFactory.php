@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: stopka
- * Date: 21.4.17
- * Time: 19:32
- */
 
 namespace Stopka\Assetor\Package;
 
@@ -12,6 +6,12 @@ namespace Stopka\Assetor\Package;
 use Nette\Object;
 use Stopka\Assetor\Collector\IAssetCollectionGroupFactory;
 
+/**
+ * Factory of packages from config array
+ * @package Stopka\Assetor\Package
+ * @author Štěpán Škorpil
+ * @license MIT
+ */
 class PackageFactory extends Object implements IPackageFactory {
     const CONFIG_VIRTUAL = 'defaults';
     const CONFIG_EXTEND = 'extends';

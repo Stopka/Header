@@ -8,10 +8,9 @@ use Stopka\Assetor\Asset\ContentAsset;
 use Stopka\Assetor\Asset\FileAsset;
 
 /**
+ * Rendering of collected JS assets
  * @author Štěpán Škorpil
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
- * @package HeaderControl
  */
 class JsAssetControl extends AbstractAssetControl {
     const GROUP_ID = 'js';

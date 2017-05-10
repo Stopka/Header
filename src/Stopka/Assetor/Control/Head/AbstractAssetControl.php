@@ -7,8 +7,8 @@ use Stopka\Assetor\Asset\BaseAsset;
 use Stopka\Assetor\Collector\AssetsCollector;
 
 /**
+ * Basic control for rendering assets
  * @author Štěpán Škorpil
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
  * @package HeaderControl
  */

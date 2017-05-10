@@ -4,8 +4,6 @@ namespace Stopka\Assetor\Collector;
 
 
 /**
- * Class of Packages for AssetsCollector.
- *
  * @author Štěpán Škorpil
  * @license MIT
  */

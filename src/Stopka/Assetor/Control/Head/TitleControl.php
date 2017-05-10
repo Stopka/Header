@@ -7,12 +7,9 @@ use Nette\Utils\Html;
 use Stopka\Assetor\Collector\ITitleCollector;
 
 /**
+ * Rendering of collected titles
  * @author Štěpán Škorpil
- * @copyright (c) Ondřej Mirtes 2009, 2010
- * @copyright (c) Roman Mátyus 2012
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
- * @package HeaderControl
  */
 class TitleControl extends Control implements IHeadComponent {
 

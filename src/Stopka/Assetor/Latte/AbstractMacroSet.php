@@ -7,10 +7,9 @@ use Latte\Macros\MacroSet;
 use Stopka\Assetor\Collector\AssetsCollector;
 
 /**
- * Class defined macros for AssetsCollector.
+ * Common basics of macros
  *
- * @author Roman Mátyus
- * @copyright (c) Roman Mátyus 2012
+ * @author Štěpán Škorpil
  * @license MIT
  */
 abstract class AbstractMacroSet extends MacroSet {

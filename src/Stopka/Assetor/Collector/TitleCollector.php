@@ -5,11 +5,9 @@ namespace Stopka\Assetor\Collector;
 use Nette\Object;
 
 /**
- *
+ * Holds setting of page title
  * @author Štěpán Škorpil
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
- * @package HeaderControl
  */
 class TitleCollector extends Object implements ITitleCollector {
     const META_APP_TITLES = ['apple-mobile-web-app-title', 'application-name'];

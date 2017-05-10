@@ -7,10 +7,9 @@ use Latte\MacroNode;
 use Latte\PhpWriter;
 
 /**
- * Class defined macros for AssetsCollector.
+ * Common basics of asset macros
  *
- * @author Roman Mátyus
- * @copyright (c) Roman Mátyus 2012
+ * @author Štěpán Škorpil
  * @license MIT
  */
 abstract class AbstractAssetMacroSet extends AbstractMacroSet {

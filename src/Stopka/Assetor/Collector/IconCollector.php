@@ -5,11 +5,9 @@ namespace Stopka\Assetor\Collector;
 use Nette\Object;
 
 /**
- *
+ * Holds settings of page icon
  * @author Štěpán Škorpil
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
- * @package HeaderControl
  */
 class IconCollector extends Object implements IIconCollector {
 

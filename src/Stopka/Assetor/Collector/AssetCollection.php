@@ -8,7 +8,7 @@ use Stopka\Assetor\Asset\ContentAsset;
 use Stopka\Assetor\Asset\FileAsset;
 
 /**
- * Class of Packages for AssetsCollector.
+ * Collection of Packages for AssetsCollector.
  *
  * @author Štěpán Škorpil
  * @license MIT

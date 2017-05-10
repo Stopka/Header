@@ -3,9 +3,8 @@
 namespace Stopka\Assetor\Collector;
 
 /**
- * @copyright (c) Roman Mátyus 2015
+ * @author Štěpán Škorpil
  * @license MIT
- * @package HeaderControl
  */
 interface ITitleCollector {
     

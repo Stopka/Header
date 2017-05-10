@@ -2,10 +2,9 @@
 
 namespace Stopka\Assetor\Control\Head;
 
-/*
- * @copyright (c) Roman Mátyus
+/**
+ * @author Štěpán Škorpil
  * @license MIT
- * @package HeaderControl
  */
 interface IHeadComponentFactory {
     /**

@@ -7,7 +7,7 @@ use Latte\PhpWriter;
 use Stopka\Assetor\Collector\ITitleCollector;
 
 /**
- * Class defined macros for AssetsCollector.
+ * Title setting macro
  *
  * @author Štěpán Škorpil
  * @license MIT

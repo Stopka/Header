@@ -6,11 +6,9 @@ use Nette\InvalidArgumentException;
 use Nette\Object;
 
 /**
- *
+ * Holds settings of page meta tags
  * @author Štěpán Škorpil
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
- * @package HeaderControl
  */
 class MetaCollector extends Object implements IMetaCollector {
     const CONTENTTYPE_TEXT_HTML = 'text/html';

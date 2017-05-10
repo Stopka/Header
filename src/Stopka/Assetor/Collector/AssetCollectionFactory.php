@@ -5,7 +5,7 @@ namespace Stopka\Assetor\Collector;
 use Nette\Object;
 
 /**
- * Class of Packages for AssetsCollector.
+ * Creates asset collection from config array
  *
  * @author Štěpán Škorpil
  * @license MIT

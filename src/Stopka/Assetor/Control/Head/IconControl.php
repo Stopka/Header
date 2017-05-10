@@ -7,11 +7,9 @@ use Nette\Utils\Html;
 use Stopka\Assetor\Collector\IIconCollector;
 
 /**
- *
+ * Renders app icon in various forms
  * @author Štěpán Škorpil
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
- * @package HeaderControl
  */
 class IconControl extends Control implements IHeadComponent {
 

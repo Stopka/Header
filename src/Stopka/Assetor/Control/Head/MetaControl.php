@@ -7,11 +7,9 @@ use Nette\Utils\Html;
 use Stopka\Assetor\Collector\IMetaCollector;
 
 /**
- *
+ * Rendering of collected meta data tags
  * @author Štěpán Škorpil
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
- * @package HeaderControl
  */
 class MetaControl extends Control implements IHeadComponent {
     /** @var  IMetaCollector */

@@ -5,10 +5,9 @@ namespace Stopka\Assetor\Latte;
 use Stopka\Assetor\Control\Head\JsAssetControl;
 
 /**
- * Class defined macros for AssetsCollector.
+ * Js controling macros
  *
- * @author Roman Mátyus
- * @copyright (c) Roman Mátyus 2012
+ * @author Štěpán Škorpil
  * @license MIT
  */
 class JsAssetMacroSet extends AbstractAssetMacroSet {

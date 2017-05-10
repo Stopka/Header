@@ -2,7 +2,6 @@
 
 namespace Stopka\Assetor\Package;
 
-
 /**
  * @author Štěpán Škorpil
  * @license MIT

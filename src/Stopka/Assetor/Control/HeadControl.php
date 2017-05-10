@@ -10,15 +10,10 @@ use Stopka\Assetor\Control\Head\IHeadComponent;
 use Stopka\Assetor\Control\Head\IHeadComponentFactory;
 
 /**
- * HeaderControl
- * This renderable component is ultimate solution for valid and complete HTML headers.
+ * Renders html head element with all header tags as additional controls
  *
  * @author Štěpán Škorpil
- * @copyright (c) Ondřej Mirtes 2009, 2010
- * @copyright (c) Roman Mátyus 2012
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
- * @package HeaderControl
  */
 class HeadControl extends Control {
 

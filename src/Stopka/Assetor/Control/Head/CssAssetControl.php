@@ -8,8 +8,8 @@ use Stopka\Assetor\Asset\ContentAsset;
 use Stopka\Assetor\Asset\FileAsset;
 
 /**
+ * Renders collected CSS assets
  * @author Štěpán Škorpil
- * @copyright (c) Štěpán Škorpil 2017
  * @license MIT
  * @package HeaderControl
  */

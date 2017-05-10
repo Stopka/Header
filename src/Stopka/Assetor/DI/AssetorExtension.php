@@ -32,8 +32,7 @@ use Stopka\Assetor\Control\IHtmlControlFactory;
 /**
  * Class for register extension AssetsCollector.
  *
- * @author Roman Mátyus
- * @copyright (c) Roman Mátyus 2012
+ * @author Štěpán Škorpil
  * @license MIT
  */
 class AssetorExtension extends CompilerExtension {

@@ -11,7 +11,7 @@ use Stopka\Assetor\Package\IPackage;
 use Stopka\Assetor\Package\IPackageFactory;
 
 /**
- * Class for collecting CSS and JS files in PHP framework Nette.
+ * Class for collecting assets in PHP framework Nette.
  *
  * @author Štěpán Škorpil
  * @license MIT

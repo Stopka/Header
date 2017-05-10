@@ -6,7 +6,7 @@ use Nette\Object;
 use Stopka\Assetor\Asset\BaseAsset;
 
 /**
- * Class of Packages for AssetsCollector.
+ * Groups several asset collections of different types (ie: css+js)
  *
  * @author Štěpán Škorpil
  * @license MIT
