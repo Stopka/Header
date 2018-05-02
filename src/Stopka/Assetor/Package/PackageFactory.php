@@ -2,8 +2,7 @@
 
 namespace Stopka\Assetor\Package;
 
-
-use Nette\Object;
+use Nette\SmartObject;
 use Stopka\Assetor\Collector\IAssetCollectionGroupFactory;
 
 /**
@@ -12,7 +11,9 @@ use Stopka\Assetor\Collector\IAssetCollectionGroupFactory;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class PackageFactory extends Object implements IPackageFactory {
+class PackageFactory implements IPackageFactory {
+    use SmartObject;
+
     const CONFIG_VIRTUAL = 'defaults';
     const CONFIG_EXTEND = 'extends';
     const CONFIG_PROVIDE = 'provides';
@@ -30,6 +31,11 @@ class PackageFactory extends Object implements IPackageFactory {
         return $this;
     }
 
+    /**
+     * @param array $details
+     * @return IPackage
+     * @throws InvalidPackageException
+     */
     public function create(array $details): IPackage {
         if (isset($details[self::CONFIG_VIRTUAL])) {
             return $this->createVirtualPackage($details);
@@ -62,11 +68,16 @@ class PackageFactory extends Object implements IPackageFactory {
         return $package;
     }
 
+    /**
+     * @param array $details
+     * @return VirtualPackage
+     * @throws InvalidPackageException
+     */
     public function createVirtualPackage(array $details): VirtualPackage {
         $default = $details[self::CONFIG_VIRTUAL];
         unset($details[self::CONFIG_VIRTUAL]);
         if (count($details) > 0) {
-            $args = explode(', ', array_keys($details));
+            $args = implode(', ', array_keys($details));
             throw new InvalidPackageException("Invalid arguments for virtual package: $args");
         }
         return new VirtualPackage($default);

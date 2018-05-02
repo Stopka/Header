@@ -2,7 +2,7 @@
 
 namespace Stopka\Assetor\Collector;
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * Creates asset groups acording to configuration
@@ -10,7 +10,8 @@ use Nette\Object;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class AssetCollectionGroupFactory extends Object implements IAssetCollectionGroupFactory {
+class AssetCollectionGroupFactory implements IAssetCollectionGroupFactory {
+    use SmartObject;
 
     protected $groupNames;
 

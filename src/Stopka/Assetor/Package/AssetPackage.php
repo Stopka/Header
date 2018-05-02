@@ -2,6 +2,7 @@
 
 namespace Stopka\Assetor\Package;
 
+use Nette\SmartObject;
 use Stopka\Assetor\Asset\BaseAsset;
 use Stopka\Assetor\Collector\AssetCollectionGroup;
 
@@ -12,6 +13,7 @@ use Stopka\Assetor\Collector\AssetCollectionGroup;
  * @license MIT
  */
 class AssetPackage implements IPackage {
+    use SmartObject;
 
     /** @var string[] */
     protected $extends = [];

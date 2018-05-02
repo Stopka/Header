@@ -9,7 +9,7 @@
 namespace Stopka\Assetor\Asset;
 
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * Asset base class
@@ -17,5 +17,6 @@ use Nette\Object;
  * @author Štěpán Škorpil
  * @license MIT
  */
-abstract class BaseAsset extends Object {
+abstract class BaseAsset {
+    use SmartObject;
 }

@@ -2,7 +2,7 @@
 
 namespace Stopka\Assetor\Collector;
 
-use Nette\Object;
+use Nette\SmartObject;
 use Stopka\Assetor\Asset\BaseAsset;
 use Stopka\Assetor\Asset\ContentAsset;
 use Stopka\Assetor\Asset\FileAsset;
@@ -13,7 +13,8 @@ use Stopka\Assetor\Asset\FileAsset;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class AssetCollection extends Object {
+class AssetCollection {
+    use SmartObject;
 
     /** @var BaseAsset[] attached assets */
     protected $assets = array();

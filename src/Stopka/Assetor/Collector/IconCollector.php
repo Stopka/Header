@@ -2,14 +2,15 @@
 
 namespace Stopka\Assetor\Collector;
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * Holds settings of page icon
  * @author Štěpán Škorpil
  * @license MIT
  */
-class IconCollector extends Object implements IIconCollector {
+class IconCollector implements IIconCollector {
+    use SmartObject;
 
     /** @var string */
     private $icon;

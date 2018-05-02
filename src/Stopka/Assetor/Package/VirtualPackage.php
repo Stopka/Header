@@ -1,7 +1,8 @@
 <?php
 
 namespace Stopka\Assetor\Package;
-use Nette\Object;
+
+use Nette\SmartObject;
 use Stopka\Assetor\Asset\BaseAsset;
 
 /**
@@ -10,7 +11,8 @@ use Stopka\Assetor\Asset\BaseAsset;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class VirtualPackage extends Object implements IPackage {
+class VirtualPackage implements IPackage {
+    use SmartObject;
 
     /** @var string default selected subpackage */
     protected $default;

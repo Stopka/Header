@@ -3,14 +3,16 @@
 namespace Stopka\Assetor\Collector;
 
 use Nette\InvalidArgumentException;
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * Holds settings of page meta tags
  * @author Štěpán Škorpil
  * @license MIT
  */
-class MetaCollector extends Object implements IMetaCollector {
+class MetaCollector implements IMetaCollector {
+    use SmartObject;
+
     const CONTENTTYPE_TEXT_HTML = 'text/html';
     const CHARSET_UTF8 = 'UTF-8';
 

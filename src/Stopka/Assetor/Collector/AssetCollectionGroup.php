@@ -2,7 +2,7 @@
 
 namespace Stopka\Assetor\Collector;
 
-use Nette\Object;
+use Nette\SmartObject;
 use Stopka\Assetor\Asset\BaseAsset;
 
 /**
@@ -11,7 +11,8 @@ use Stopka\Assetor\Asset\BaseAsset;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class AssetCollectionGroup extends Object {
+class AssetCollectionGroup {
+    use SmartObject;
 
     /** @var AssetCollection[] attached collections */
     protected $collections = array();

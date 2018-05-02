@@ -2,13 +2,13 @@
 
 namespace Stopka\Assetor\Collector;
 
-use Nette\Object;
+use Nette\SmartObject;
 use Stopka\Assetor\Asset\BaseAsset;
+use Stopka\Assetor\Package\IPackage;
+use Stopka\Assetor\Package\IPackageFactory;
 use Stopka\Assetor\Package\NotFoundException;
 use Stopka\Assetor\Package\NotSupportedException;
 use Stopka\Assetor\Package\PackageException;
-use Stopka\Assetor\Package\IPackage;
-use Stopka\Assetor\Package\IPackageFactory;
 
 /**
  * Class for collecting assets in PHP framework Nette.
@@ -16,7 +16,8 @@ use Stopka\Assetor\Package\IPackageFactory;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class AssetsCollector extends Object {
+class AssetsCollector {
+    use SmartObject;
 
     /** @var  IPackageFactory */
     protected $packageFactory;
@@ -43,6 +44,12 @@ class AssetsCollector extends Object {
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @param bool $needed
+     * @return null|IPackage
+     * @throws NotFoundException
+     */
     public function getPackage(string $name, bool $needed = false): ?IPackage {
         if ($needed && !isset($this->packages[$name])) {
             throw new NotFoundException("Assetor package '$name' not found");
@@ -88,6 +95,13 @@ class AssetsCollector extends Object {
         return $this;
     }
 
+    /**
+     * @param string $packageName
+     * @param array $resolved
+     * @param array $unresolved
+     * @throws NotFoundException
+     * @throws NotSupportedException
+     */
     private function resolveDependeciesRecursively(string $packageName, array &$resolved, array &$unresolved) {
         $unresolved[] = $packageName;
         $package = $this->getPackage($packageName, true);
@@ -109,6 +123,11 @@ class AssetsCollector extends Object {
         }
     }
 
+    /**
+     * @param array $packagesNames
+     * @throws NotFoundException
+     * @throws PackageException
+     */
     private function resolveSelection(array $packagesNames): void {
         foreach ($packagesNames as $packagesName) {
             $package = $this->getPackage($packagesName, true);
@@ -135,6 +154,8 @@ class AssetsCollector extends Object {
     /**
      * @param string[] $packageNames
      * @return string[]
+     * @throws NotFoundException
+     * @throws PackageException
      */
     private function resolveDependecies(array $packageNames): array {
         $this->resolveSelection($packageNames);
@@ -162,6 +183,8 @@ class AssetsCollector extends Object {
 
     /**
      * @return string[]
+     * @throws NotFoundException
+     * @throws PackageException
      */
     public function getDependentPackages(): array {
         if (!$this->dependentPackages) {
@@ -173,6 +196,7 @@ class AssetsCollector extends Object {
     /**
      * @param string $groupName
      * @return BaseAsset[]
+     * @throws PackageException
      */
     public function getAssets(string $groupName): array {
         $result = [];
@@ -188,6 +212,7 @@ class AssetsCollector extends Object {
      * @param string $groupName
      * @param string $content
      * @param array $params
+     * @return string
      */
     public function addContent(string $groupName, string $content, array $params = []): string {
         $packageName = $params['name'] ?? 'content_' . sha1($content);

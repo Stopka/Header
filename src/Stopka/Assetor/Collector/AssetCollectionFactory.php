@@ -2,7 +2,7 @@
 
 namespace Stopka\Assetor\Collector;
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * Creates asset collection from config array
@@ -10,13 +10,16 @@ use Nette\Object;
  * @author Štěpán Škorpil
  * @license MIT
  */
-class AssetCollectionFactory extends Object {
+class AssetCollectionFactory {
+    use SmartObject;
 
     /**
      * @param array $config
      * @return AssetCollection
      */
     public function create(array $config): AssetCollection{
+        /** @noinspection PhpExpressionResultUnusedInspection */
+        $config;
         $collection = new AssetCollection();
         return $collection;
     }

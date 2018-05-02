@@ -2,14 +2,16 @@
 
 namespace Stopka\Assetor\Collector;
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * Holds setting of page title
  * @author Štěpán Škorpil
  * @license MIT
  */
-class TitleCollector extends Object implements ITitleCollector {
+class TitleCollector implements ITitleCollector {
+    use SmartObject;
+
     const META_APP_TITLES = ['apple-mobile-web-app-title', 'application-name'];
 
     /** @var string[] document hierarchical titles */
